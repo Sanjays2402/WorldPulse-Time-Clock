@@ -327,6 +327,7 @@ function App() {
       const resolved = await resolveCurrentLocationCity(cities, localZone)
 
       const resolvedCity = resolved?.city ?? null
+      const resolvedMode = resolved?.mode ?? 'approximate'
 
       if (!resolvedCity) {
         if (!ignore) {
@@ -342,7 +343,7 @@ function App() {
         if (!ignore) {
           setLocalWeather(snapshot)
           setLocalWeatherCity(resolvedCity)
-          setLocalWeatherMode(resolved.mode)
+          setLocalWeatherMode(resolvedMode)
         }
       } catch {
         const fallbackLocal = DateTime.now().setZone(localZone)
@@ -350,7 +351,7 @@ function App() {
         if (!ignore) {
           setLocalWeather(buildDemoWeather(resolvedCity, fallbackLocal))
           setLocalWeatherCity(resolvedCity)
-          setLocalWeatherMode(resolved.mode)
+          setLocalWeatherMode(resolvedMode)
         }
       }
     }
@@ -382,7 +383,6 @@ function App() {
 
   const awakeCount = cards.filter((card) => card.status !== 'Sleeping').length
   const businessCount = cards.filter((card) => card.isBusinessHours).length
-  const liveWeatherCount = cards.filter((card) => card.weather.source === 'live').length
 
   function handleAddCity(candidate: SearchCandidate) {
     const nextCity = createCityFromSearch(candidate)
